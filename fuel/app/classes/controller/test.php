@@ -5,6 +5,8 @@
  * Date: 03/07/2018
  * Time: 14:27
  */
+namespace Controller;
+
 class Controller_Test extends Controller
 {
     public function action_test()

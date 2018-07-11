@@ -11,7 +11,7 @@
 <body>
 
 <div class="container">
-    <h2>Vertical (basic) form</h2>
+    <h2>Welcome to my application!</h2>
     <form method="post" action="/login/login">
         <div class="form-group">
             <label for="email">Username:</label>

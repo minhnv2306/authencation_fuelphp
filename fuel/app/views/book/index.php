@@ -35,6 +35,9 @@
 <a href="/csv/export">Download CSV</a>
 <a href="/csv/gettxt" style="padding-left: 30px">Download TXT</a>
 <a href="/csv/import" style="padding-left: 30px">Import CSV</a>
+<?php if (!empty(Session::get_flash('message'))): ?>
 <script>
     toastr.success('Have fun storming the castle!', 'Miracle Max Says');
 </script>
+<?php endif; ?>
+

@@ -1,0 +1,47 @@
+{% extends('includes/layout.twig') %}
+
+{% block content %}
+    <h2>Media Object</h2>
+    <p>Use the "media-left" class to left-align a media object. Text that should appear next to the image, is placed inside a container with class="media-body".</p>
+    <p>Tip: Use the "media-right" class to right-align the media object.</p><br>
+
+    <!-- Left-aligned media object -->
+    <div class="media">
+        <div class="media-left">
+            <img src="https://www.w3schools.com/bootstrap/img_avatar1.png" class="media-object" style="width:60px">
+        </div>
+        <div class="media-body">
+            <h4 class="media-heading">Left-aligned</h4>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+        </div>
+    </div>
+    <hr>
+
+    <!-- Right-aligned media object -->
+    <div class="media">
+        <div class="media-body">
+            <h4 class="media-heading">Right-aligned</h4>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+        </div>
+        <div class="media-right">
+            <img src="https://www.w3schools.com/bootstrap/img_avatar1.png" class="media-object" style="width:60px">
+        </div>
+    </div>
+
+    {% if(is_active()) %}
+    {{ form_open({'action' : 'book/index',  'method' : 'post' }) }}
+        <div class="form-group">
+            <label for="email">Email:</label>
+            <input type="email" class="form-control" id="email" placeholder="Enter email" name="email">
+        </div>
+        <div class="form-group">
+            <label for="pwd">Password:</label>
+            <input type="password" class="form-control" id="pwd" placeholder="Enter password" name="pwd">
+        </div>
+        <div class="checkbox">
+            <label><input type="checkbox" name="remember"> Remember me</label>
+        </div>
+        <button type="submit" class="btn btn-default">Submit</button>
+    {{ form_close() }}
+    {% endif %}
+{% endblock %}

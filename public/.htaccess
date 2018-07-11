@@ -26,7 +26,7 @@
 	#RewriteCond %{HTTP_HOST} (.+)$ [NC]
 	#RewriteRule ^(.*)$ http://www.%1/$1 [R=301,L]
 
-	# Remove index.php from URL
+	# Remove index.twig from URL
 	#RewriteCond %{HTTP:X-Requested-With}	!^XMLHttpRequest$
 	#RewriteCond %{THE_REQUEST}				^[^/]*/index\.php [NC]
 	#RewriteRule ^index\.php(.*)$			$1 [R=301,NS,L]
@@ -37,7 +37,7 @@
         RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
     </IfModule>
 
-	# Send request via index.php if not a real file or directory
+	# Send request via index.twig if not a real file or directory
 	RewriteCond %{REQUEST_FILENAME} !-f
 	RewriteCond %{REQUEST_FILENAME} !-d
 

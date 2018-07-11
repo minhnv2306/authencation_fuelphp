@@ -19,7 +19,6 @@ class Controller_Book extends Controller_Template {
     }
 
     public function action_index() {
-
         // Create the view object
         //$view = View::forge('book/index');
 
@@ -66,6 +65,10 @@ class Controller_Book extends Controller_Template {
                 $book->author = Input::param('author');
                 $book->price = Input::param('price');
                 $book->save();
+
+                // tell the next page request which step to process
+                Session::set_flash('message', 'hehe');
+
                 Response::redirect('book');
             } catch (Orm\ValidationFailed $e) {
                 $view->set('errors', $e->getMessage(), false);
