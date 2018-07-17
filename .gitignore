@@ -18,6 +18,8 @@ desktop.ini
 /composer.lock
 /fuel/vendor
 /node_modules
+/fuel/app/coverage
+coverage/
 
 # any of the fuel packages installed by default
 /docs/

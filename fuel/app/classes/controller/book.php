@@ -1,6 +1,7 @@
 <?php
 class Controller_Book extends Controller_Template {
     public $template = 'layout';
+    private $current_user;
 
     public function before()
     {

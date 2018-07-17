@@ -44,9 +44,9 @@ class Controller_Login extends Controller
 
                             // if a user was created succesfully
                             if ($created) {
-
                                 // Login user and redirect home
                                 Auth::login($username, $password);
+
                                 \Response::redirect_back('/');
                             } else {
                                 echo "Tao user that bai";
@@ -56,16 +56,41 @@ class Controller_Login extends Controller
                         }
 
                     } else {
-                        echo "Token sai sai";
+                        // Token field is not true
+                        $errorMessage = 'Dont hack my wed :D!';
+                        $data = [
+                            'errorMessage' => $errorMessage,
+                        ];
+
+                        return Response::forge(View::forge('login/register')->set($data));
                     }
                 } else {
-                    echo "email da ton tai";
+                    // email is exist
+                    $errorMessage = 'Email is exist!';
+                    $data = [
+                        'errorMessage' => $errorMessage,
+                    ];
+
+                    return Response::forge(View::forge('login/register')->set($data));
                 }
             } else {
-                echo "username da ton tai";
+                // username is exist
+                $errorMessage = 'Username is exist!';
+                $data = [
+                    'errorMessage' => $errorMessage,
+                ];
+
+                return Response::forge(View::forge('login/register')->set($data));
             }
         } else {
-            echo "Validator error";
+            $errors = $vali->error();
+            $oldRequest = $vali->validated();
+            $data = [
+                'errors' => $errors,
+                'oldRequest' => $oldRequest,
+            ];
+
+            return Response::forge(View::forge('login/register')->set($data));
         }
     }
 
@@ -74,35 +99,42 @@ class Controller_Login extends Controller
         $vali = $this->_vali();
 
         $check_vali = $vali->run();
-
-        var_dump($check_vali);
         // was the login form posted?
-        if (\Input::method() == 'POST')
-        {
-            // check the credentials.
-            if (\Auth::instance()->login(\Input::param('username'), \Input::param('password')))
-            {
-                // did the user want to be remembered?
-                if (\Input::param('remember', false))
-                {
-                    // create the remember-me cookie
-                    \Auth::remember_me();
+        if (\Input::method() == 'POST') {
+
+            if ($check_vali) {
+                // check the credentials.
+                if (\Auth::instance()->login(\Input::param('username'), \Input::param('password'))) {
+                    // did the user want to be remembered?
+                    if (\Input::param('remember', false)) {
+                        // create the remember-me cookie
+                        \Auth::remember_me();
+                    } else {
+                        // delete the remember-me cookie if present
+                        \Auth::dont_remember_me();
+                    }
+                    // logged in, go back to the page the user came from, or the
+                    // application dashboard if no previous page can be detected
+                    \Response::redirect_back('/');
+                } else {
+                    // login failed, show an error message
+                    //\Messages::error(__('login.failure'));
+                    $errorMessage = 'Username or password not right!';
+                    $data = [
+                        'errorMessage' => $errorMessage,
+                    ];
+
+                    return Response::forge(View::forge('login/index')->set($data));
                 }
-                else
-                {
-                    // delete the remember-me cookie if present
-                    \Auth::dont_remember_me();
-                }
-                // logged in, go back to the page the user came from, or the
-                // application dashboard if no previous page can be detected
-                \Response::redirect_back('/');
-            }
-            else
-            {
-                echo 2;
-                // Login sai, tự động chuyển về trang login
-                // login failed, show an error message
-                //\Messages::error(__('login.failure'));
+            } else {
+                $errors = $vali->error();
+                $oldRequest = $vali->validated();
+                $data = [
+                    'errors' => $errors,
+                    'oldRequest' => $oldRequest,
+                ];
+
+                return Response::forge(View::forge('login/index')->set($data));
             }
         }
 
@@ -158,7 +190,7 @@ class Controller_Login extends Controller
         $vali->add_field('password', 'Your password', 'required|min_length[3]|max_length[10]');
         $vali->add_field('confirmed_password', 'Confirmed password', 'required|match_field[password]');
 
-        return ($vali);
+        return $vali;
     }
     private function _validation_unique_username($username)
     {

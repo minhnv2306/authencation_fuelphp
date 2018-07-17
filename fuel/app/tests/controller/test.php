@@ -14,6 +14,28 @@ class Test_Controller_Test extends TestCase
 
         $url = new \Model\Test();
         $result = $url->sluggify($originalString);
-        $this->assertEquals($expectedResult, $result);
+        if (true) {
+            $this->assertEquals($expectedResult, $result);
+        } else {
+            $this->assertTrue(true);
+        }
+    }
+
+    public function test_MockObject()
+    {
+        // Tạo lại 1 class Test với các phương thức giống hệt lớp chính
+        $authorizeNet = $this->getMockBuilder(\Model\Test::class)
+            ->getMock();
+
+        // Định nghĩa lại một phương thức nào đó với giá trị trả về
+        $return = true;
+
+        // Tạo override phương thức với giá trị giả lập return
+        $authorizeNet->expects($this->once())
+            ->method('sluggify')
+            ->will($this->returnValue($return));
+
+        $result = $authorizeNet->sluggify('aaa');
+        $this->assertTrue($result);
     }
 }

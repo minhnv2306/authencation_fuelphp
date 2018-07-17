@@ -9,7 +9,7 @@ namespace  Model;
 class Test extends \Model
 {
     // Method for unit test
-    public static function sluggify($string, $separator = '-', $maxLength = 96)
+    public function sluggify($string, $separator = '-', $maxLength = 96)
     {
         $title = iconv('UTF-8', 'ASCII//TRANSLIT//IGNORE', $string);
         $title = preg_replace('%[^-/+|\w ]%', '', $title);

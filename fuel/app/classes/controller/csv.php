@@ -25,7 +25,7 @@ class Controller_CSV extends Controller
         $response->set_header('Expires', 'Mon, 26 Jul 1997 05:00:00 GMT');
         $response->set_header('Pragma', 'no-cache');
 
-        // CSVを出力: CSV output
+        // CSVを出力: CSV output or view
         echo Format::forge($books)->to_csv();
 
         // Response
