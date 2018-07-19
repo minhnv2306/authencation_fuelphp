@@ -21,13 +21,13 @@
         </div>
     <?php endif; ?>
 
-    <?php if (!empty($errorMessage)): ?>
+    <?php if (!empty(Session::get_flash('errorMessage'))): ?>
         <div class="alert alert-danger">
-            <strong>Danger!</strong> <?php echo $errorMessage ?>
+            <strong>Danger!</strong> <?php echo Session::get_flash('errorMessage') ?>
         </div>
     <?php endif; ?>
 
-    <form method="post" action="/login/register">
+    <form method="post" action="/register/register">
         <?php echo \Form::csrf(); ?>
         <div class="form-group">
             <label for="username">Username:</label>

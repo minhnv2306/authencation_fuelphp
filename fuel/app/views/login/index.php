@@ -21,9 +21,9 @@
     <?php endif; ?>
 
 
-    <?php if (!empty($errorMessage)): ?>
+    <?php if (!empty(Session::get_flash('errorMessage'))): ?>
         <div class="alert alert-danger">
-            <strong>Danger!</strong> <?php echo $errorMessage ?>
+            <strong>Danger!</strong> <?php echo Session::get_flash('errorMessage') ?>
         </div>
     <?php endif; ?>
 
