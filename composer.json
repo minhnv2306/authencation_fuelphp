@@ -14,7 +14,9 @@
         "fuel/orm": "1.8.*",
         "fuel/parser": "1.8.*",
         "fuelphp/upload": "2.0.6",
-        "twig/twig": "^2.4"
+        "twig/twig": "^2.4",
+        "hosopy/fuel-jobqueue": "dev-master",
+        "pda/pheanstalk": "^2.1"
     },
     "require-dev": {
         "fuel/docs": "1.8.*",

@@ -275,7 +275,8 @@ return array(
 		 'packages'  => array(
 		     'orm',
              'auth',
-             'parser'
+             'parser',
+             'fuel-jobqueue',
 		 ),
 
 		/**

@@ -29,6 +29,7 @@ coverage/
 /fuel/packages/oil/
 /fuel/packages/orm/
 /fuel/packages/parser/
+/fuel/packages/fuel-jobqueue/
 
 # dynamically generated files
 /fuel/app/logs/*/*/*
