@@ -18,6 +18,13 @@ class Twig_Fuel_Extension extends \Parser\Twig_Fuel_Extension
                 new Twig_SimpleFunction('is_active', function () {
                     return true;
                 }),
+                new Twig_SimpleFunction('isValue', function () {
+                    if (!empty(Session::get_flash())) {
+                        return true;
+                    } else {
+                        return false;
+                    }
+                }),
             ]
         );
     }

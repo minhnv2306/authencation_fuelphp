@@ -1,0 +1,28 @@
+<nav class = "navbar navbar-inverse navbar-fixed-top">
+    <div class = "container">
+        <div class = "navbar-header">
+
+            <button type = "button" class = "navbar-toggle collapsed"
+                    datatoggle = "collapse" data-target = "#navbar"
+                    aria-expanded = "false" ariacontrols = "navbar">
+                <span class=  "sr-only">Toggle navigation</span>
+                <span class = "icon-bar"></span>
+                <span class = "icon-bar"></span>
+                <span class = "icon-bar"></span>
+            </button>
+            <a class = "navbar-brand" href = "#">FuelPHP Sample</a>
+        </div>
+
+        <div id = "navbar" class = "collapse navbar-collapse">
+            <ul class = "nav navbar-nav">
+                <li class = "active"><a href = "/book/index">Home</a></li>
+                <li><a href = "/book/create">Add book</a></li>
+                <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">admin <span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="/login/logout">Log out</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div><!--/.nav-collapse -->
+    </div>
+</nav>

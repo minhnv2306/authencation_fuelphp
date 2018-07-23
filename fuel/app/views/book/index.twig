@@ -1,0 +1,43 @@
+{% extends('layout.twig') %}
+{% block content%}
+    <div class = "starter-template" style = "padding: 50px 0 0 0;">
+        <table class = "table">
+            <thead>
+            <tr>
+                <th>#</th>
+                <th>Title</th>
+                <th>Author</th>
+                <th>Price</th>
+                <th></th>
+            </tr>
+            </thead>
+
+            <tbody>
+            {% for book in books %}
+            <tr>
+                <td> {{ book.id }}</td>
+                <td> {{ book.title }}</td>
+                <td> {{ book.author }}</td>
+                <td> {{ book.price }}</td>
+                <td>
+                    <a href = "/books/{{ book.id }}" class="btn btn-primary btn-sm">Edit</a>
+                    <a href = "/book/destroy/{{ book.id }}" class="btn btn-danger btn-sm">Delete</a>
+                </td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        <ul>
+        </ul>
+        <a href="/csv/export">Download CSV</a>
+        <a href="/csv/gettxt" style="padding-left: 30px">Download TXT</a>
+        <a href="/csv/import" style="padding-left: 30px">Import CSV</a>
+
+    </div>
+    {{ pagination }}
+    {% if(isValue()) %}
+        <script>
+            toastr.success('{{ session_get_flash('message') }}', 'Success');
+        </script>
+    {% endif %}
+{% endblock %}

@@ -15,8 +15,8 @@ return array(
         },
         'request_started' => function() {
             // Request is requested
-            echo "Event when resquest is requested (in config)!";
-            echo "<br>";
+//            echo "Event when resquest is requested (in config)!";
+//            echo "<br>";
         },
         'controller_started' => function() {
             // Before controllers before() method called

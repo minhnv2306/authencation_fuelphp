@@ -9,6 +9,10 @@ class Controller_Twiger extends \Controller
 {
     public function action_index()
     {
-        return \View::forge('twig/index.twig');
+        $data = array(
+            'name' => 'Minh',
+            'arrayTest' => array(1, 2, 3, 4),
+        );
+        return \View::forge('twig/index.twig')->set($data);
     }
 }

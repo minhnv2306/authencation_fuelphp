@@ -1,5 +1,8 @@
 {
     "/public/assets/css/vendor.css": "/public/assets/css/vendor.css",
     "/public/assets/css/toastr.css": "/public/assets/css/toastr.css",
-    "/public/assets/js/toastr.min.js": "/public/assets/js/toastr.min.js"
+    "/public/assets/css/bootstrap.css": "/public/assets/css/bootstrap.css",
+    "/public/assets/js/toastr.min.js": "/public/assets/js/toastr.min.js",
+    "/public/assets/js/jquery.js": "/public/assets/js/jquery.js",
+    "/public/assets/js/bootstrap.js": "/public/assets/js/bootstrap.js"
 }

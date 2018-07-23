@@ -1,7 +1,13 @@
 {% extends('includes/layout.twig') %}
 
 {% block content %}
-    <h2>Media Object</h2>
+    <ul>
+    {% for item in arrayTest %}
+        <li> {{ item|e }} </li>
+    {% endfor %}
+    </ul>
+    {{ 200000|number_format }}
+    <h2> {{ name }}</h2>
     <p>Use the "media-left" class to left-align a media object. Text that should appear next to the image, is placed inside a container with class="media-body".</p>
     <p>Tip: Use the "media-right" class to right-align the media object.</p><br>
 

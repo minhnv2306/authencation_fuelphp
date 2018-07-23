@@ -1,5 +1,8 @@
 <?php
-class Model_Book extends Orm\Model {
+
+namespace Model;
+
+class Book extends \Orm\Model {
     protected static $_connection = 'production';
     protected static $_table_name = 'book';
     protected static $_primary_key = array('id');
@@ -43,4 +46,26 @@ class Model_Book extends Orm\Model {
     protected static $_observers = array('Orm\\Observer_Validation' => array (
         'events' => array('before_save')
     ));
+
+    public static function findOrFail($id)
+    {
+        if(!($book = Book::find($id))) {
+            throw new \HttpNotFoundException();
+        }
+        return $book;
+    }
+    public static function createModel($request)
+    {
+        $book = Book::forge();
+        $book->title = $request['title'];
+        $book->author = $request['author'];
+        $book->price = $request['price'];
+        $book->save();
+    }
+
+    public function updateModel($data)
+    {
+        $this->set($data);
+        $this->save();
+    }
 }

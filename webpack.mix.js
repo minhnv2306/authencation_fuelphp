@@ -18,6 +18,15 @@ mix
     .styles([
         'node_modules/toastr/build/toastr.css'
     ], 'public/assets/css/toastr.css')
+    .styles([
+        'node_modules/bootstrap/dist/css/bootstrap.css'
+    ], 'public/assets/css/bootstrap.css')
     .copy([
         'node_modules/toastr/build/toastr.min.js'
-    ], 'public/assets/js/toastr.min.js');
+    ], 'public/assets/js/toastr.min.js')
+    .copy([
+        'node_modules/jquery/dist/jquery.js'
+    ], 'public/assets/js/jquery.js')
+    .copy([
+        'node_modules/bootstrap/dist/js/bootstrap.js'
+    ], 'public/assets/js/bootstrap.js');
