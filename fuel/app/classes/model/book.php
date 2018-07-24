@@ -68,4 +68,13 @@ class Book extends \Orm\Model {
         $this->set($data);
         $this->save();
     }
+
+    public static function paginate($config)
+    {
+        return Book::query()
+            ->rows_offset($config->offset)
+            ->rows_limit($config->per_page)
+            ->order_by('id','desc')
+            ->get();
+    }
 }

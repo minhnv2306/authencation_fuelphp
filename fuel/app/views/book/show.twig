@@ -1,6 +1,6 @@
 {% extends('layout.twig') %}
 {% block content%}
-    <form method="post" action="/book/update/{{ book.id }}" style="padding-top: 75px">
+    <form method="post" action="/book/update/{{ book.id }}">
         <div class="form-group">
             <label for="email">Title:</label>
             <input type="text" class="form-control" id="title" name="title" required value="{{ book.title }}">

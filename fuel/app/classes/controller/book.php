@@ -21,29 +21,10 @@ class Controller_Book extends Controller {
     }
 
     public function action_index() {
+        $config = $this->getPaginateConfig();
+        $data['books'] = Book::paginate($config);
+        $data['pagination'] = $this->editLinkPaginate($config);
 
-        $config = array(
-            'pagination_url' => 'http://bookstore.local/book/index',
-            'total_items'    => Book::count(),
-            'per_page'       => 10,
-            'uri_segment'    => 3,
-            // or if you prefer pagination by query string
-            //'uri_segment'    => 'page',
-        );
-
-        $pagination = Pagination::forge('mypagination', $config);
-
-        $data['books'] = Book::query()
-            ->rows_offset($pagination->offset)
-            ->rows_limit($pagination->per_page)
-            ->order_by('id','desc')
-            ->get();
-
-        // we pass the object, it will be rendered when echo'd in the view
-        $temp = str_replace('</span>', '</li>', $pagination);
-        $data['pagination'] = str_replace("<span","<li", $temp);
-
-        // return the view
         return \View::forge('book/index.twig', $data);
 
     }
@@ -56,11 +37,21 @@ class Controller_Book extends Controller {
     public function action_store()
     {
         try {
-            Book::createModel(Input::all());
+            $rules = $this->getRules();
+            $isValidate = $rules->run();
 
-            //tell the next page request which step to process
-            Session::set_flash('message', 'Add new book successfully!');
-            Response::redirect('book/index');
+            if ($isValidate) {
+                Book::createModel(Input::all());
+
+                //tell the next page request which step to process
+                Session::set_flash('message', 'Add new book successfully!');
+                Response::redirect('book/index');
+            } else {
+                $data = $this->getErrorAndOldRequest($rules);
+                $this->setErrorMessage($rules);
+
+                return Response::forge(View::forge('book/create.twig')->set($data));
+            }
         } catch (Orm\ValidationFailed $e) {
             Response::redirect_back()->set('errors', $e->getMessage(), false);
         }
@@ -100,5 +91,53 @@ class Controller_Book extends Controller {
         } catch (Orm\ValidationFailed $e) {
             Response::redirect_back()->set('errors', $e->getMessage(), false);
         }
+    }
+
+    private function getRules()
+    {
+        $rules = Validation::forge();
+        // Tham số thứ 2 là tên trường khi hiển thị lỗi validate không hợp lệ
+        $rules->add_field('title', 'your username', 'required|min_length[3]');
+        $rules->add_field('author', 'your password', 'required');
+        $rules->add_field('price', 'your price', 'required');
+
+        return $rules;
+    }
+
+    private function setErrorMessage($rules)
+    {
+        $rules->set_message('required', 'The field :label :field :value is required.');
+        $rules->set_message('min_length', 'The field :label :field ":value" has to contain at least 3 characters.');
+    }
+
+    private function getErrorAndOldRequest($rules)
+    {
+        $errors = $rules->error();
+        $oldRequest = $rules->validated();
+        $data = [
+            'errors' => $errors,
+            'oldRequest' => $oldRequest,
+        ];
+
+        return $data;
+    }
+
+    private function getPaginateConfig()
+    {
+        $config = array(
+            'pagination_url' => 'http://bookstore.local/book/index',
+            'total_items'    => Book::count(),
+            'per_page'       => 10,
+            'uri_segment'    => 3,
+            // or if you prefer pagination by query string
+            //'uri_segment'    => 'page',
+        );
+        return Pagination::forge('mypagination', $config);
+    }
+
+    private function editLinkPaginate($config)
+    {
+        $temp = str_replace('</span>', '</li>', $config);
+        return str_replace("<span","<li", $temp);
     }
 }
