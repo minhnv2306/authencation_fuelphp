@@ -1,17 +1,19 @@
 {% extends('layout.twig') %}
 {% block content%}
     <form method="post" action="/book/update/{{ book.id }}">
+        {{ dump(session_get_flash('errors')) }}
+
         <div class="form-group">
             <label for="email">Title:</label>
-            <input type="text" class="form-control" id="title" name="title" required value="{{ book.title }}">
+            <input type="text" class="form-control" id="title" name="title" value="{{ book.title }}">
         </div>
         <div class="form-group">
             <label for="pwd">Author:</label>
-            <input type="text" class="form-control" id="author" name="author" required value="{{ book.author }}">
+            <input type="text" class="form-control" id="author" name="author" value="{{ book.author }}">
         </div>
         <div class="form-group">
             <label for="pwd">Price:</label>
-            <input type="text" class="form-control" id="price" name="price" required value="{{ book.price }}">
+            <input type="text" class="form-control" id="price" name="price" value="{{ book.price }}">
         </div>
         <button type="submit" class="btn btn-primary">Submit</button>
     </form>

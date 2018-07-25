@@ -4,7 +4,7 @@ namespace Model;
 
 class Book extends \Orm\Model {
     protected static $_connection = 'production';
-    protected static $_table_name = 'book';
+    protected static $_table_name = 'books';
     protected static $_primary_key = array('id');
 
     protected static $_properties = array (
@@ -42,6 +42,16 @@ class Book extends \Orm\Model {
                 'type' => 'text'
             ),
         ),
+        'cover_img' => array(
+            'data_type' => 'decimal',
+            'label' => 'Book cover',
+            'validation' => array (
+                'required',
+            ),
+            'form' => array (
+                'type' => 'text'
+            ),
+        )
     );
     protected static $_observers = array('Orm\\Observer_Validation' => array (
         'events' => array('before_save')
@@ -56,19 +66,37 @@ class Book extends \Orm\Model {
     }
     public static function createModel($request)
     {
-        $book = Book::forge();
-        $book->title = $request['title'];
-        $book->author = $request['author'];
-        $book->price = $request['price'];
-        $book->save();
+        try {
+            $book = Book::forge();
+            $book->title = $request['title'];
+            $book->author = $request['author'];
+            $book->price = $request['price'];
+            $book->cover_img = $request['cover_img'];
+            $book->save();
+        } catch (Exception $ex) {
+            throw new Exception($ex->getCode());
+        }
     }
 
     public function updateModel($data)
     {
-        $this->set($data);
-        $this->save();
+        try {
+            $this->set($data);
+            $this->save();
+        } catch (Exception $ex) {
+            throw new Exception($ex->getCode());
+        }
     }
 
+    public static function deleteModel($id)
+    {
+        try {
+            $book = Book::findOrFail($id);
+            $book->delete();
+        } catch (Exception $ex) {
+            throw new Exception($ex->getCode());
+        }
+    }
     public static function paginate($config)
     {
         return Book::query()
@@ -76,5 +104,17 @@ class Book extends \Orm\Model {
             ->rows_limit($config->per_page)
             ->order_by('id','desc')
             ->get();
+    }
+
+    public static function getConfigPaginate()
+    {
+        return array(
+            'pagination_url' => 'http://bookstore.local/book/index',
+            'total_items'    => Book::count(),
+            'per_page'       => 10,
+            'uri_segment'    => 'page',
+            // or if you prefer pagination by query string
+            //'uri_segment'    => 'page',
+        );
     }
 }

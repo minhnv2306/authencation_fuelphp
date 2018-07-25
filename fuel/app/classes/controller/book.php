@@ -8,7 +8,6 @@ class Controller_Book extends Controller {
     public function before()
     {
         parent::before();
-
         // Assign current_user to the instance so controllers can use it
         $this->current_user = Auth::check() ? Model_User::find(Arr::get(Auth::get_user_id(), 1)) : null;
 
@@ -17,16 +16,19 @@ class Controller_Book extends Controller {
         } else {
             return Response::forge(View::forge('product/add'));
         }
-
     }
 
     public function action_index() {
-        $config = $this->getPaginateConfig();
-        $data['books'] = Book::paginate($config);
-        $data['pagination'] = $this->editLinkPaginate($config);
+        $data = $this->getDataWithPaginate();
+
+        // handle cover_img
+        foreach ($data['books'] as $item)
+        {
+            $item['cover_img'] = Asset::img($item['cover_img']);
+            $item['cover_img'] = str_replace("<img","<img width=80%",$item['cover_img']);
+        }
 
         return \View::forge('book/index.twig', $data);
-
     }
 
     public function action_create()
@@ -36,24 +38,19 @@ class Controller_Book extends Controller {
 
     public function action_store()
     {
-        try {
-            $rules = $this->getRules();
-            $isValidate = $rules->run();
+        $file = $this->saveCoverImage();
+        $rules = $this->getRules();
 
-            if ($isValidate) {
-                Book::createModel(Input::all());
+        if ($rules->run()) {
+            $this->saveBook($file['saved_as']);
+            $this->handleSuccessResponse('Add new book successfully!');
 
-                //tell the next page request which step to process
-                Session::set_flash('message', 'Add new book successfully!');
-                Response::redirect('book/index');
-            } else {
-                $data = $this->getErrorAndOldRequest($rules);
-                $this->setErrorMessage($rules);
+            Response::redirect('book/index');
+        } else {
+            $data = $this->getErrorAndOldRequest($rules);
+            $this->setErrorMessageValidate($rules);
 
-                return Response::forge(View::forge('book/create.twig')->set($data));
-            }
-        } catch (Orm\ValidationFailed $e) {
-            Response::redirect_back()->set('errors', $e->getMessage(), false);
+            return Response::forge(View::forge('book/create.twig')->set($data));
         }
     }
 
@@ -66,31 +63,31 @@ class Controller_Book extends Controller {
 
     public function action_update($id)
     {
-        try {
-            $book = Book::findOrFail($id);
-            $book->updateModel(Input::all());
-
-            // tell the next page request which step to process
-            Session::set_flash('message', 'Update successfully');
-
-            Response::redirect('book/index');
-        } catch (Orm\ValidationFailed $e) {
-            Response::redirect_back()->set('errors', $e->getMessage(), false);
+        $rules = $this->getRules();
+        if ($rules->run()) {
+            $this->updateBook($id, Input::all());
+            $this->handleSuccessResponse('Update successfully');
+        } else {
+            $this->handleErrorResponse('Update fail!');
         }
+
+        Response::redirect_back();
     }
     public function action_destroy($id)
     {
-        try {
-            $book = Book::findOrFail($id);
-            $book->delete();
+        Book::deleteModel($id);
+        $this->handleSuccessResponse('Delete successfully!');
 
-            // tell the next page request which step to process
-            Session::set_flash('message', 'Delete successfully!');
+        Response::redirect('book/index');
+    }
 
-            Response::redirect('book/index');
-        } catch (Orm\ValidationFailed $e) {
-            Response::redirect_back()->set('errors', $e->getMessage(), false);
-        }
+    private function getDataWithPaginate()
+    {
+        $config = $this->getPaginateConfig();
+        $data['books'] = Book::paginate($config);
+        $data['pagination'] = $this->editLinkPaginate($config);
+
+        return $data;
     }
 
     private function getRules()
@@ -104,7 +101,7 @@ class Controller_Book extends Controller {
         return $rules;
     }
 
-    private function setErrorMessage($rules)
+    private function setErrorMessageValidate($rules)
     {
         $rules->set_message('required', 'The field :label :field :value is required.');
         $rules->set_message('min_length', 'The field :label :field ":value" has to contain at least 3 characters.');
@@ -124,14 +121,8 @@ class Controller_Book extends Controller {
 
     private function getPaginateConfig()
     {
-        $config = array(
-            'pagination_url' => 'http://bookstore.local/book/index',
-            'total_items'    => Book::count(),
-            'per_page'       => 10,
-            'uri_segment'    => 3,
-            // or if you prefer pagination by query string
-            //'uri_segment'    => 'page',
-        );
+        $config = Book::getConfigPaginate();
+
         return Pagination::forge('mypagination', $config);
     }
 
@@ -139,5 +130,58 @@ class Controller_Book extends Controller {
     {
         $temp = str_replace('</span>', '</li>', $config);
         return str_replace("<span","<li", $temp);
+    }
+
+    private function handleSuccessResponse($message)
+    {
+        Session::set_flash('message', $message);
+    }
+    private function handleErrorResponse($message)
+    {
+        Session::set_flash('error', $message);
+    }
+    private function checkCoverImageFile()
+    {
+        // Custom configuration for this upload
+        $config = array(
+            'path' => DOCROOT . 'assets/img',
+            'randomize' => true,
+            'ext_whitelist' => array('img', 'jpg', 'jpeg', 'gif', 'png'),
+        );
+
+        // process the uploaded files in $_FILES
+        Upload::process($config);
+        return Upload::is_valid();
+    }
+
+    private function saveCoverImage()
+    {
+        if ($this->checkCoverImageFile()) {
+            Upload::save();
+
+            return Upload::get_files(0);
+        } else {
+            $this->handleErrorResponse('Upload of files with this extension is not allowed');
+
+            return Response::redirect_back();
+        }
+    }
+    private function setInformationBook($coverImg)
+    {
+        $data = Input::all();
+        $data['cover_img'] = $coverImg;
+
+        return $data;
+    }
+    private function saveBook($coverPath)
+    {
+        $book = $this->setInformationBook($coverPath);
+        Book::createModel($book);
+    }
+
+    private function updateBook($id, $request)
+    {
+        $book = Book::findOrFail($id);
+        $book->updateModel($request);
     }
 }

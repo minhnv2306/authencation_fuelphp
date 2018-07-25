@@ -30,6 +30,8 @@ coverage/
 /fuel/packages/orm/
 /fuel/packages/parser/
 /fuel/packages/fuel-jobqueue/
+/public/assets/img/
+/public/files
 
 # dynamically generated files
 /fuel/app/logs/*/*/*

@@ -5,10 +5,11 @@
             <thead>
             <tr>
                 <th>#</th>
-                <th>Title</th>
-                <th>Author</th>
+                <th style="width: 420px">Title</th>
+                <th style="width: 100px">Author</th>
                 <th>Price</th>
-                <th></th>
+                <th>Action</th>
+                <th style="width: 170px">Cover</th>
             </tr>
             </thead>
 
@@ -18,10 +19,13 @@
                 <td> {{ book.id }}</td>
                 <td> {{ book.title }}</td>
                 <td> {{ book.author }}</td>
-                <td> {{ book.price }}</td>
+                <td> {{ book.price | number_format }}</td>
                 <td>
                     <a href = "/books/{{ book.id }}" class="btn btn-primary btn-sm">Edit</a>
                     <a href = "/book/destroy/{{ book.id }}" class="btn btn-danger btn-sm delete">Delete</a>
+                </td>
+                <td>
+                    {{ book.cover_img }}
                 </td>
             </tr>
             {% endfor %}
@@ -35,11 +39,6 @@
 
     </div>
     {{ pagination }}
-    {% if(isValue()) %}
-        <script>
-            toastr.success('{{ session_get_flash('message') }}', 'Success');
-        </script>
-    {% endif %}
     <script>
         $('.delete').click(function (e) {
             if (!confirm("Do you want delete it?")) {

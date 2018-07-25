@@ -11,6 +11,16 @@
     {% endblock %}
 
 </div><!-- /.container -->
+{% if(isMessageFlashSession()) %}
+    <script>
+        toastr.success('{{ session_get_flash('message') }}', 'Success');
+    </script>
+{% endif %}
+{% if(isErrorFlashSession()) %}
+    <script>
+        toastr.error('{{ session_get_flash('error') }}', 'Error');
+    </script>
+{% endif %}
 </body>
 
 </html>
