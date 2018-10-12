@@ -6,7 +6,7 @@
 return array(
 	'default' => array(
 		'connection'  => array(
-			'dsn'        => 'mysql:host=localhost;dbname=tutorialspoint_bookdb',
+			'dsn'        => 'mysql:host=dockerfuel_mariadb_1;dbname=tutorialspoint_bookdb',
 			'username'   => 'root',
 			'password'   => '1',
 		),

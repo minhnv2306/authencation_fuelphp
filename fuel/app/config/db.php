@@ -3,7 +3,7 @@ return array (
     'development' => array (
         'type'           => 'mysqli',
         'connection'     => array (
-            'hostname'       => 'localhost',
+            'hostname'       => 'dockerfuel_mariadb_1',
             'port'           => '3306',
             'database'       => 'tutorialspoint_bookdb',
             'username'       => 'root',
@@ -21,7 +21,7 @@ return array (
     'production' => array (
         'type'           => 'mysqli',
         'connection'     => array (
-            'hostname'       => 'localhost',
+            'hostname'       => 'dockerfuel_mariadb_1',
             'port'           => '3306',
             'database'       => 'tutorialspoint_bookdb',
             'username'       => 'root',
