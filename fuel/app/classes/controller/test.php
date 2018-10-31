@@ -5,7 +5,8 @@
  * Date: 03/07/2018
  * Time: 14:27
  */
-namespace Controller;
+
+use Model\Test;
 
 class Controller_Test extends Controller
 {
@@ -37,5 +38,18 @@ FROM
 _EOT_;
         $ret_all = \DB::query($sql_query)->execute()->as_array();
         var_dump($ret_all);
+    }
+
+    // For testing static method
+    public function action_doYouLoveMe()
+    {
+        return Test::doYouLoveMe();
+    }
+
+    public function action_testRedirect()
+    {
+        $test = Test::doYouLoveMe();
+
+        return Response::redirect('book/index');
     }
 }
