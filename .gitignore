@@ -39,3 +39,4 @@ coverage/
 /fuel/app/logs/*/*/*
 /fuel/app/cache/*/*
 /fuel/app/config/crypt.php
+/fuel/app/tmp

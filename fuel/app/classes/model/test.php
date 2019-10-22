@@ -6,6 +6,9 @@
  * Time: 15:49
  */
 namespace  Model;
+use Book;
+use Container;
+
 class Test extends \Model
 {
     // Method for unit test
@@ -17,5 +20,16 @@ class Test extends \Model
         $title = preg_replace('/[\/_|+ -]+/', $separator, $title);
 
         return $title;
+    }
+
+    // Static method for unit test
+    public static function doYouLoveMe()
+    {
+        return 'Yes';
+    }
+
+    public static function getBookModel()
+    {
+        return Container::get('book');
     }
 }
